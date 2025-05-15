@@ -32,7 +32,7 @@ $(window).on('load', function () {
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
         e.preventDefault();
-        
+
         const target = document.querySelector(this.getAttribute('href'));
 
         if (!target) {
@@ -139,4 +139,47 @@ function sendEmail() {
 document.querySelector(".custom-btn").addEventListener("click", function (e) {
     e.preventDefault();
     validateForm();
+});
+
+// Project Slider Functionality
+$(document).ready(function () {
+    var slider = $('#slider ul');
+    var slideCount = slider.children().length;
+    var slideWidth = slider.children().first().width();
+    var currentIndex = 0;
+    var autoSlideInterval;
+
+    function moveSlide(index) {
+        slider.animate({
+            marginLeft: -index * slideWidth
+        }, 500);
+        currentIndex = index;
+    }
+
+    $('.control_next').click(function (e) {
+        e.preventDefault();
+        currentIndex = (currentIndex + 1) % slideCount;
+        moveSlide(currentIndex);
+    });
+
+    $('.control_prev').click(function (e) {
+        e.preventDefault();
+        currentIndex = (currentIndex - 1 + slideCount) % slideCount;
+        moveSlide(currentIndex);
+    });
+
+    function startAutoSlide() {
+        autoSlideInterval = setInterval(function () {
+            currentIndex = (currentIndex + 1) % slideCount;
+            moveSlide(currentIndex);
+        }, 5000);
+    }
+
+    function stopAutoSlide() {
+        clearInterval(autoSlideInterval);
+    }
+
+    $('#slider').hover(stopAutoSlide, startAutoSlide);
+
+    startAutoSlide();
 });
